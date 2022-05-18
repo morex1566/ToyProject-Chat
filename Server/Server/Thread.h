@@ -14,9 +14,9 @@ class Server;
 class Thread
 {
 private:
-	thread*	 thread;
-	mutex	 mutex;
-	bool	 looping;
+	vector<thread*>	 pool;
+	mutex			 mutex;
+	bool			 looping;
 
 	void processClient(Server&, SOCKET&);
 public:

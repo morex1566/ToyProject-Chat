@@ -4,7 +4,7 @@ int main()
 {
 	Client client;
 
-	client.start();
+	client.initialize();
 	client.update();
 	client.release();
 }

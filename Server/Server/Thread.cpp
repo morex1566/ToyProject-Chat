@@ -8,8 +8,6 @@ void Thread::processClient(Server& server, SOCKET& client)
     int  result;
     int  addrLength;
     char buf[513];
-    char share[512];
-
 
     // client information
     addrLength = sizeof(server.getClientAddr());
@@ -83,7 +81,6 @@ void Thread::processClient(Server& server, SOCKET& client)
 Thread::Thread()
 {
     looping = true;
-	thread = 0;
 }
 
 Thread::~Thread()
@@ -95,22 +92,26 @@ bool Thread::update(Server& server)
 {
     if (!looping) { return false; }
 
+    
+
 	return true;
 }
 
 void Thread::release()
 {
-    delete thread;
-
+    if (pool.size() > 0)
+    {
+        pool.clear();
+        vector<thread*>().swap(pool);
+    }
 	return;
 }
 
 bool Thread::setThread(Server& server, SOCKET& socket)
 {
-	thread = new std::thread([&]{ processClient(server, socket); });
-	thread->join();
+    pool.push_back(new std::thread([&] { processClient(server, socket); }));
 
-	return thread != nullptr ? true : false;
+	return pool.back() != nullptr ? true : false;
 }
 
 ///    public area end       ///
