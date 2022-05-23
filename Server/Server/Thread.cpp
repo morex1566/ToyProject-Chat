@@ -50,8 +50,10 @@ void Thread::processClient(Server& server, SOCKET& client)
             break;
 
         default:
+            mutex.lock();
             server.setShare(buf);
             strcpy_s(buf, "data update!");
+            mutex.unlock();
             break;
         }
 
