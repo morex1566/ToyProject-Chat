@@ -11,6 +11,7 @@ using namespace std;
 
 class Client
 {
+	static const int bufsize = 513;
 private:
 	WSADATA		windowSock;
 	SOCKET		connectSock;

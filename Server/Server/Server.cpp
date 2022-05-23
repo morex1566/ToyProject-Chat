@@ -135,16 +135,6 @@ void Server::release()
 	return;
 }
 
-SOCKADDR_IN& Server::getClientAddr()
-{
-	return clientAddr;
-}
-
-SOCKET& Server::getClientScok()
-{
-	return clientSock;
-}
-
 int Server::getShare()
 {
 	return database.share;

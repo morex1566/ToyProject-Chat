@@ -39,8 +39,6 @@ public:
 	void release();
 	
 	// utility
-	SOCKADDR_IN& getClientAddr();
-	SOCKET& getClientScok();
 	int	getShare();
 	void setShare(int);
 	void setShare(const char*);

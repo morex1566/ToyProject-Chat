@@ -59,7 +59,7 @@ void Client::start(char buf[])
 	getline(cin, hostIp);
 	serverAddr.sin_addr.s_addr = inet_addr(hostIp.c_str());
 
-	result = connect(connectSock, (SOCKADDR*)&serverAddr, sizeof(serverAddr));	
+	result = connect(connectSock, (SOCKADDR*)&serverAddr, sizeof(serverAddr));
 	if (result == SOCKET_ERROR)
 	{
 		cout << "connect failed!!..." << endl;
@@ -87,7 +87,7 @@ void Client::start(char buf[])
 	}
 
 	buf[result] = '\0';
-	share = stoi(buf);
+	share = atoi(buf);
 
 	cout << "[TCP 클라이언트] " << result << "바이트를 받았습니다." << endl;
 	cout << "[받은 데이터] " << buf << endl;
@@ -158,7 +158,8 @@ void Client::update()
 			break;
 
 		buf[result] = '\0';
-		
+		share = atoi(buf);
+
 		cout << "[TCP 클라이언트] " << result << "바이트를 받았습니다." << endl;
 		cout << "[받은 데이터] " << buf << endl;
 	}

@@ -5,18 +5,21 @@
 
 void Thread::processClient(Server& server, SOCKET& client)
 {
+    SOCKET clientSock;
+    SOCKADDR_IN clientAddr;
     int  result;
     int  addrLength;
     char buf[513];
 
     // client information
-    addrLength = sizeof(server.getClientAddr());
-    getpeername(server.getClientScok(), (SOCKADDR*)&server.getClientAddr(), &addrLength);
+    clientSock = client;
+    addrLength = sizeof(clientAddr);
+    getpeername(clientSock, (SOCKADDR*)&clientAddr, &addrLength);
 
     while (1) {
 
         // data receive
-        result = recv(server.getClientScok(), buf, 513, 0);
+        result = recv(clientSock, buf, 513, 0);
         if (result == SOCKET_ERROR) // recv failed
         {
             break;
@@ -36,8 +39,8 @@ void Thread::processClient(Server& server, SOCKET& client)
         }
 
         // data output
-        cout << "[TCP/" << inet_ntoa(server.getClientAddr().sin_addr);
-        cout << ":" << ntohs(server.getClientAddr().sin_port) << "] " << buf << endl;
+        cout << "[TCP/" << inet_ntoa(clientAddr.sin_addr);
+        cout << ":" << ntohs(clientAddr.sin_port) << "] " << buf << endl;
 
         // data interface
         switch (buf[0])
@@ -47,15 +50,13 @@ void Thread::processClient(Server& server, SOCKET& client)
             break;
 
         default:
-            mutex.lock();
             server.setShare(buf);
             strcpy_s(buf, "data update!");
-            mutex.unlock();
             break;
         }
 
         // data send
-        result = send(server.getClientScok(), buf, (int)strlen(buf), 0);
+        result = send(clientSock, buf, (int)strlen(buf), 0);
         if (result == SOCKET_ERROR)
         {
             MessageBox(NULL, L"'send()' is failed!", L"processClient Error", MB_ICONERROR);
@@ -65,11 +66,11 @@ void Thread::processClient(Server& server, SOCKET& client)
     }
 
     // closesocket()
-    closesocket(server.getClientScok());
+    closesocket(clientSock);
 
     // output
-    cout << "[TCP 서버] 클라이언트 종료: IP 주소 = " << inet_ntoa(server.getClientAddr().sin_addr);
-    cout << ", 포트 번호 = " << ntohs(server.getClientAddr().sin_port) << endl;
+    cout << "[TCP 서버] 클라이언트 종료: IP 주소 = " << inet_ntoa(clientAddr.sin_addr);
+    cout << ", 포트 번호 = " << ntohs(clientAddr.sin_port) << endl;
 
     return;
 }
